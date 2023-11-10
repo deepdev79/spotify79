@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify stats</title>
+    <link rel="icon" type="image/png" href="/data.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="src/spotifyData.js"></script>
+  </head>
+  <body>
+    <div class="nav-bar">
+      <h1>Spotify Lifetime Stats</h1>
+      <a href="#home" class="navopt">Home</a>
+      <a href="#album" class="navopt">Album</a>
+      <a href="#track" class="navopt">Track</a>
+      <a href="#artist" class="navopt">Artist</a>
+      <a href="#other" class="navopt">Other</a>
+    </div>
+    <div class="loader hidden-loader">
+      <img src="/ldd.svg" alt="gear loader" />
+    </div>
+    <!-- FILE UPLOAD/HOME -->
+    <div class="content home-page" id="Home">
+      <form id="upload">
+        <label for="file"
+          ><h4>Select files containing streaming history(JSON format)<br /></h4
+        ></label>
+        <input type="file" multiple id="file" accept=".json" />
+        <button type="submit" class="button">Upload</button>
+      </form>
+      <div class="file-info"><ul class="file-list"></ul></div>
+      <!-- Data time result -->
+      <div class="data-result"></div>
+    </div>
+    <!-- ALBUMS -->
+    <div class="hidden content" id="Album">
+      <table class="common-table">
+        <thead>
+          <tr>
+            <th>Album</th>
+            <th>Artist</th>
+            <th>Times Listened</th>
+            <th>Hours Listened</th>
+          </tr>
+        </thead>
+        <tbody class="album-data"></tbody>
+      </table>
+      <div>
+        <button class="album-button button">Previous</button>
+        <button class="album-button button">Next</button>
+      </div>
+      <div>
+        <button class="sort-album button">Sort by Minutes</button>
+      </div>
+    </div>
+    <!-- TRACKS -->
+    <div class="hidden content" id="Track">
+      <table class="common-table">
+        <thead>
+          <tr>
+            <th>Track</th>
+            <th>Artist</th>
+            <th>Times Listened</th>
+            <th>Hours Listened</th>
+          </tr>
+        </thead>
+        <tbody class="track-data"></tbody>
+      </table>
+      <div>
+        <button class="track-button button">Previous</button>
+        <button class="track-button button">Next</button>
+      </div>
+      <div>
+        <button class="sort-track button">Sort by Minutes</button>
+      </div>
+    </div>
+    <!-- ARTISTS -->
+    <div class="hidden content" id="Artist">
+      <table class="common-table">
+        <thead>
+          <tr>
+            <th>Artist</th>
+            <th>Times Listened</th>
+            <th>Minutes Listened</th>
+            <th>Hours Listened</th>
+          </tr>
+        </thead>
+        <tbody class="artist-data"></tbody>
+      </table>
+      <div>
+        <button class="artist-button button">Previous</button>
+        <button class="artist-button button">Next</button>
+      </div>
+      <div>
+        <button class="sort-artist button">Sort by Minutes</button>
+      </div>
+    </div>
+    <!-- MISC -->
+    <div class="hidden content" id="Other">
+      <div>
+        <ul class="platform">
+          Platforms played on:
+        </ul>
+      </div>
+      <div>
+        <ul class="countries">
+          Countries streamed in(code):
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
