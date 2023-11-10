@@ -12,8 +12,8 @@ This is completely frontend pet project using vanilla Javascript. It might take 
 
 3. Scroll down and check "Select Extended streaming history" box and click on request data.(If you don't select you'll recieve history of past year and those files won't work here)
 
-4. After you recieve file(s) upload all at once.
-
-5. The files you need to upload should be formated as :
+4. The files you need to upload should be formated as :
 
    "Streaming*History_Audio*[time period]\_[file number]"
+
+5. After you recieve file(s) upload all at once on "https://deepdev79.github.io/spotify/"
