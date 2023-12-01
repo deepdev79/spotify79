@@ -19,11 +19,13 @@ let hoursListened = 0;
 
 let dayStart, dayEnd;
 
+//------------------------LIFETIME CALCULATION--------------------------------//
+
 //Data valid from
 
-function dataValid() {
-  dayStart = new Date(data[0].ts).toUTCString();
-  dayEnd = new Date(data.slice(-1)[0].ts).toUTCString();
+function dataValid(start, end) {
+  dayStart = new Date(start).toUTCString();
+  dayEnd = new Date(end).toUTCString();
 }
 
 //Different platform used to play songs
@@ -35,7 +37,6 @@ function platformInfo() {
   });
   platform = new Set(tempPlatform);
   countries = new Set(tempCountry);
-  tempPlatform.length = 0;
 }
 
 //-------ARTISTS LISTENED TO--------//
@@ -114,21 +115,87 @@ function info() {
   albums.sort((a, b) => b.get("timesPlayed") - a.get("timesPlayed"));
 }
 
+//----------------YEARLY CALCULATIONS------------------------//
+
+function artistsInfoYear(record) {
+  flag = 1;
+  let unArtist = new Map();
+  artists.forEach((ele) => {
+    if (ele.get("name") === record.artistName) {
+      flag = 0;
+      ele.set("mins", ele.get("mins") + record.msPlayed);
+      ele.set("timesPlayed", ele.get("timesPlayed") + 1);
+    }
+  });
+  if (flag === 1) {
+    unArtist.set("name", record.artistName);
+    unArtist.set("mins", record.msPlayed);
+    unArtist.set("timesPlayed", 1);
+    artists.push(unArtist);
+  }
+}
+
+function tracksInfoYear(record) {
+  flag = 1;
+  hoursListened += record.msPlayed;
+  let unTrack = new Map();
+  tracks.forEach((ele) => {
+    if (ele.get("name") === record.trackName) {
+      flag = 0;
+      ele.set("mins", ele.get("mins") + record.msPlayed);
+      ele.set("timesPlayed", ele.get("timesPlayed") + 1);
+    }
+  });
+  if (flag === 1) {
+    unTrack.set("name", record.trackName);
+    unTrack.set("aname", record.artistName);
+    unTrack.set("mins", record.msPlayed);
+    unTrack.set("timesPlayed", 1);
+    tracks.push(unTrack);
+  }
+}
+
+function infoYear() {
+  for (const record of data) {
+    artistsInfoYear(record);
+    tracksInfoYear(record);
+  }
+  artists.sort((a, b) => b.get("timesPlayed") - a.get("timesPlayed"));
+  tracks.sort((a, b) => b.get("timesPlayed") - a.get("timesPlayed"));
+}
+
 //--------MAIN FUNCTION will only execute when correct files are uploaded and PROMISEALL is fulfilled down in HOME section--------//
 // inp contains array of parsed JSON files
 
 function spotify(inp) {
+  if (data.length > 0) {
+    data = [];
+    artists = [];
+    tracks = [];
+    albums = [];
+    tempCountry = [];
+    tempPlatform = [];
+    hoursListened = 0;
+  }
   data = inp.flat();
-  console.log(data[0]); //to see how data is stored
-  platformInfo();
-  info();
-  dataValid();
-  albumDisplay();
-  other();
-  other2();
-  artistDisplay();
-  tracksDisplay();
-  home();
+  // console.log(data[0]); //uncomment to see how data is stored
+  if (Object.keys(data[0]).length < 5) {
+    infoYear();
+    dataValid(data[0].endTime, data.slice(-1)[0].endTime);
+    artistDisplay();
+    tracksDisplay();
+    home();
+  } else {
+    platformInfo();
+    info();
+    dataValid(data[0].ts, data.slice(-1)[0].ts);
+    albumDisplay();
+    other();
+    other2();
+    artistDisplay();
+    tracksDisplay();
+    home();
+  }
   loader.classList.add("hidden-loader");
 }
 
@@ -167,7 +234,6 @@ function filesSelected(event) {
     let li = document.createElement("li");
     li.textContent = `File ${i + 1} = ${files[i].name}`;
     fileList.appendChild(li);
-    // console.log(files[i].name);
   }
 }
 
